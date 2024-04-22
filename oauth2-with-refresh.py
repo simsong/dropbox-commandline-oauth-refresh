@@ -7,6 +7,7 @@ from pathlib import Path
 import dropbox
 from dropbox import DropboxOAuth2FlowNoRedirect
 from dropbox.exceptions import ApiError
+import json
 
 script_name = os.path.basename(sys.argv[0])
 
@@ -78,6 +79,15 @@ def main():
         except ApiError as e:
             logging.critical(e)
             sys.exit("Dropbox API error!")
+
+        print("Documentation here: https://dropbox-sdk-python.readthedocs.io/en/latest/")
+        for attr in dir(account):
+            if attr[0]!='_':
+                print(f"account.{attr} = ",getattr(account,attr))
+
+        print("list files:")
+        for entry in dbx.files_list_folder("").entries:
+            print(entry.name)
 
 
 if __name__ == '__main__':
